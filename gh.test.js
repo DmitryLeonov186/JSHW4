@@ -11,25 +11,52 @@ afterEach(() => {
 
 describe("Github page tests", () => {
   test("The h1 header content'", async () => {
-    jest.setTimeout(10000)
     const firstLink = await page.$("header div div a");
     await firstLink.click();
-    await page.waitForSelector('h1');
-    const title2 = await page.title();
-    expect(title2).toEqual('GitHub · Build and ship software on a single, collaborative platform · GitHub');
-  }, 60000);
+    await page.waitForSelector("h1");
+    const actual = await page.title();
+    const expected =
+      "GitHub · Build and ship software on a single, collaborative platform · GitHub";
+    expect(actual).toEqual(expected);
+  });
 
   test("The first link attribute", async () => {
-    const actual = await page.$eval("a", link => link.getAttribute('href') );
-    expect(actual).toEqual("#start-of-content");
-  }, 60000);
+    const actual = await page.$eval("a", (link) => link.getAttribute("href"));
+    const expected = "#start-of-content";
+    expect(actual).toEqual(expected);
+  });
 
   test("The page contains Sign in button", async () => {
     const btnSelector = ".btn-large-mktg.btn-mktg";
     await page.waitForSelector(btnSelector, {
       visible: true,
     });
-    const actual = await page.$eval(btnSelector, link => link.textContent);
-    expect(actual).toContain("Get started with Team")
-  }, 60000);
+    const actual = await page.$eval(btnSelector, (link) => link.textContent);
+    const expected = "Get started with Team";
+    expect(actual).toContain(expected);
+  });
+});
+
+describe("Task 2", () => {
+  test("Test 1", async () => {
+    await page.goto("https://github.blog");
+    const actual = await page.title();
+    const expected = "Home - The GitHub Blog";
+    expect(actual).toContain(expected);
+  });
+
+  test("Test 2", async () => {
+    await page.goto("https://github.com/pricing");
+    const actual = await page.title();
+    const expected = "Pricing · Plans for every developer · GitHub";
+    expect(actual).toContain(expected);
+  });
+
+  test("Test 3", async () => {
+    await page.goto("https://github.com/security/advanced-security");
+    const h1 = "#hero-section-brand-heading";
+    const actual = await page.$eval(h1, (el) => el.textContent);
+    const expected = "Security that moves at the  speed of development";
+    expect(actual).toEqual(expected);
+  });
 });
